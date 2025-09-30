@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 @theme {
-    --color-test: #253558;
+    --color-test: #31487a; /* #435c94; */
     --color-text-test: var(--color-test);
     --color-test-500: var(--color-test);
 }
