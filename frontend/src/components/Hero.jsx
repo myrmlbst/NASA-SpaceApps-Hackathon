@@ -24,6 +24,15 @@ function Hero() {
       <Starfield />
       
       <div className="max-w-4xl relative z-10">
+
+      <div className="flex justify-center mb-8">
+          <img 
+            src="/src/images/logos/adastra-blue-logo.jpeg" 
+            alt="AdAstra Logo" 
+            className="h-22 w-22 rounded-full object-cover border-4 border-test-500"
+          />
+        </div>
+        
         <h1 className="text-white text-6xl md:text-8xl font-bold mb-6 tracking-tight">
           <Typewriter 
             text="A World Away"
@@ -31,6 +40,7 @@ function Hero() {
             onComplete={() => setShowSubtitle(true)}
           />
         </h1>
+
         {showSubtitle && (
           <h2 className="text-2xl md:text-4xl text-gray-300 mb-12 font-light">
             <Typewriter 
@@ -40,6 +50,7 @@ function Hero() {
             />
           </h2>
         )}
+
         <Button 
           size="lg" 
           onClick={scrollToDashboard}
@@ -48,6 +59,7 @@ function Hero() {
           Explore the Cosmos
           <span className="absolute -inset-0.5 bg-white/20 rounded-lg blur opacity-0 group-hover:opacity-100 transition duration-300"></span>
         </Button>
+
       </div>
       
       {/* pixelated scroll indicator */}

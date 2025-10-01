@@ -21,8 +21,13 @@ function Dashboard() {
       path: '/about-model'
     },
     {
+      title: 'The Physics Behind It',
+      description: 'Understand the physics and theory that powers our entire machine learning model',
+      path: '/about-physics'
+    },
+    {
       title: 'Playground',
-      description: 'Testing playground for non-researchers to familiarize themselves with our model',
+      description: 'Educational playground for non-researchers to familiarize themselves with our model',
       path: '/playground'
     },
     {

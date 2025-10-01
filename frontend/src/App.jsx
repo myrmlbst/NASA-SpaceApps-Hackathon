@@ -3,6 +3,7 @@ import { useEffect } from 'react';
 import Hero from "./components/Hero.jsx";
 import Dashboard from "./components/Dashboard";
 import AboutModel from "./pages/AboutModel";
+import AboutPhysics from "./pages/AboutPhysics";
 import Playground from "./pages/Playground";
 import ForResearchers from "./pages/ForResearchers";
 
@@ -36,6 +37,7 @@ function App() {
         <Route path="/about-model" element={<AboutModel />} />
         <Route path="/playground" element={<Playground />} />
         <Route path="/machine-learning-model" element={<ForResearchers />} />
+        <Route path="/about-physics" element={<AboutPhysics />} />
 
       </Routes>
     </Router>
