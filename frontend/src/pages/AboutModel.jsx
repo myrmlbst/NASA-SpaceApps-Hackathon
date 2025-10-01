@@ -15,7 +15,7 @@ function AboutModel() {
         <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-6 sm:mb-8 text-test-500">About the Model</h1>
         <div className="prose prose-invert w-full max-w-none lg:max-w-5xl xl:max-w-7xl mx-auto">
           <p className="text-lg sm:text-xl mb-6 sm:mb-8">
-          Our advanced machine learning model has been trained on extensive astronomical data from the Kepler Space Telescope to identify potential exoplanets with high accuracy (80% accuracy).
+          Our advanced machine learning model has been trained on extensive astronomical data from the Kepler Space Telescope to identify potential exoplanets with high accuracy (≃80% accuracy).
         </p>
 
         <section className="mb-10 sm:mb-12">

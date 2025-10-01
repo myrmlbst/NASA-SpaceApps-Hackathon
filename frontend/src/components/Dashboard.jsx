@@ -46,7 +46,7 @@ function Dashboard() {
         </h1>
         <p className="text-xl text-gray-300 max-w-3xl mb-16">
           <Typewriter 
-            text="Explore the cosmos and discover distant worlds beyond our solar system using our Machine Learning Model, developed and tested with 80% accuracy."
+            text="Explore the cosmos and discover distant worlds beyond our solar system using our Machine Learning Model, developed and tested with ≃80% accuracy."
             speed={20}
           />
         </p>
