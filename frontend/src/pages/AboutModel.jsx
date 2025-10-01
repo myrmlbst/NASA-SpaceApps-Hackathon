@@ -156,8 +156,9 @@ function AboutModel() {
               <h3 className="font-semibold text-base sm:text-lg mb-1 sm:mb-2 text-yellow-400">Limitations</h3>
               <ul className="list-disc ml-4 sm:ml-6 space-y-1 text-sm sm:text-base">
                 <li>Moderate accuracy (78%)</li>
-                <li>May struggle with small or long-period planets</li>
+                <li>Detection is limited by the planet's dimensions</li>
                 <li>Limited to the parameter space of the training data</li>
+                <li>Collected data is limited by instrumental noise</li>
               </ul>
             </div>
           </div>
