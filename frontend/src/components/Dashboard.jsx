@@ -18,20 +18,17 @@ function Dashboard() {
     {
       title: 'About the Model',
       description: 'Learn about our ML model, why we developed it, and how it identifies potential exoplanets',
-      path: '/about-model',
-      emoji: '🔍'
+      path: '/about-model'
     },
     {
       title: 'Playground',
       description: 'Testing playground for non-researchers to familiarize themselves with our model',
-      path: '/playground',
-      emoji: '🚀'
+      path: '/playground'
     },
     {
       title: 'For Researchers',
       description: 'Check whether a star has a potential exoplanet(s). Interact with our model and explore exoplanet data',
-      path: '/machine-learning-model',
-      emoji: '📊'
+      path: '/machine-learning-model'
     }
   ];
 
@@ -58,10 +55,7 @@ function Dashboard() {
               onClick={() => navigate(item.path)}
               className="group bg-gray-800 p-8 rounded-xl hover:bg-gray-700 transition-all duration-300 transform hover:-translate-y-1 text-left"
             >
-              <div className="text-4xl mb-4 group-hover:text-test-500 transition-colors">
-                {item.emoji}
-              </div>
-              <h2 className="text-2xl font-bold mb-2 group-hover:text-test-400 transition-colors">
+              <h2 className="text-2xl font-bold mb-4 group-hover:text-test-400 transition-colors">
                 {item.title}
               </h2>
               <p className="text-gray-400 group-hover:text-gray-200 transition-colors">
