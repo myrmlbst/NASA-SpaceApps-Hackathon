@@ -1,4 +1,5 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
+import Typewriter from './Typewriter';
 import { useNavigate } from 'react-router-dom';
 
 function Dashboard() {
@@ -37,9 +38,17 @@ function Dashboard() {
   return (
     <section id="dashboard" className="min-h-screen bg-gray-900 text-white p-8 pt-20 scroll-mt-16">
       <div className="max-w-7xl mx-auto">
-        <h1 className="text-4xl md:text-6xl font-bold mb-4 text-test-500">Discover New Exoplanets</h1>
+        <h1 className="text-4xl md:text-6xl font-bold mb-4 text-test-500">
+          <Typewriter 
+            text="Discover New Exoplanets" 
+            speed={50}
+          />
+        </h1>
         <p className="text-xl text-gray-300 max-w-3xl mb-16">
-          Explore the cosmos and discover distant worlds beyond our solar system using our Machine Learning Model, developed and tested with XX% accuracy.
+          <Typewriter 
+            text="Explore the cosmos and discover distant worlds beyond our solar system using our Machine Learning Model, developed and tested with 80% accuracy."
+            speed={20}
+          />
         </p>
         
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-12">

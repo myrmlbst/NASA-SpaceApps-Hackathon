@@ -1,7 +1,11 @@
+import { useState } from 'react';
 import { Button } from './ui/button';
 import Starfield from './Starfield';
+import Typewriter from './Typewriter';
 
 function Hero() {
+  const [showSubtitle, setShowSubtitle] = useState(false);
+  
   const scrollToDashboard = () => {
     window.location.hash = 'dashboard';
     
@@ -21,11 +25,21 @@ function Hero() {
       
       <div className="max-w-4xl relative z-10">
         <h1 className="text-white text-6xl md:text-8xl font-bold mb-6 tracking-tight">
-          A World Away
+          <Typewriter 
+            text="A World Away"
+            speed={100}
+            onComplete={() => setShowSubtitle(true)}
+          />
         </h1>
-        <h2 className="text-2xl md:text-4xl text-gray-300 mb-12 font-light">
-          Hunting for Exoplanets
-        </h2>
+        {showSubtitle && (
+          <h2 className="text-2xl md:text-4xl text-gray-300 mb-12 font-light">
+            <Typewriter 
+              text="Hunting for Exoplanets"
+              speed={50}
+              className="inline-block"
+            />
+          </h2>
+        )}
         <Button 
           size="lg" 
           onClick={scrollToDashboard}
