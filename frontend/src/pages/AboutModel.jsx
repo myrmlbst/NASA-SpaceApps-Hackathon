@@ -12,11 +12,13 @@ function AboutModel() {
   return (
     <div className="min-h-screen bg-gray-900 text-white p-4 sm:p-6 md:p-8 pt-16 sm:pt-20">
       <div className="w-full max-w-7xl mx-auto">
-        <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-6 sm:mb-8 text-test-500">About the Model</h1>
-        <div className="prose prose-invert w-full max-w-none lg:max-w-5xl xl:max-w-7xl mx-auto">
-          <p className="text-lg sm:text-xl mb-6 sm:mb-8">
-          Our advanced machine learning model has been trained on extensive astronomical data from the Kepler Space Telescope to identify potential exoplanets with high accuracy (≃80% accuracy).
-        </p>
+        <div className="text-center mb-12">
+          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-4 text-test-500">About the Model</h1>
+          <p className="text-lg sm:text-xl text-gray-300 max-w-3xl mx-auto">
+            Our advanced machine learning model has been trained on extensive astronomical data from the Kepler Space Telescope to identify potential exoplanets with high accuracy (≃80% accuracy).
+          </p>
+        </div>
+        <div className="prose prose-invert w-full max-w-none lg:max-w-5xl xl:max-w-7xl">
 
         <section className="mb-10 sm:mb-12">
           <h2 className="text-xl sm:text-2xl font-bold mb-3 sm:mb-4 text-test-400">1. Data Pipeline</h2>
