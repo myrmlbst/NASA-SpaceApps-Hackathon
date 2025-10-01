@@ -1,7 +1,13 @@
 @import "tailwindcss";
+@import '@fontsource/exo-2';
 
 @theme {
     --color-test: #31487a; /* #435c94; */
     --color-text-test: var(--color-test);
     --color-test-500: var(--color-test);
+}
+
+/* Apply Exo 2 font to the entire application */
+html, body, #root {
+    font-family: 'Exo 2', sans-serif;
 }
