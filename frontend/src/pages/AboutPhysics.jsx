@@ -18,6 +18,7 @@ function AboutPhysics() {
         
         <div className="prose prose-invert max-w-7xl">
       
+          <h3 className="text-xl font-semibold mt-8 mb-3">A Brief History of Exoplanet Discovery</h3>
           <p className="mb-4">
             The search for planets beyond our solar system — exoplanets — has fascinated astronomers for centuries, but the first confirmed detection came only in 1992, when planets were found orbiting a pulsar. The first planet around a Sun-like star was discovered in 1995 (51 Pegasi b), marking the beginning of a revolution in astronomy.
           </p>
