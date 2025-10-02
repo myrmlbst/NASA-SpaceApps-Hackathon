@@ -10,7 +10,7 @@ function ForResearchers() {
   const fileInputRef = useRef(null);
   const [fileData, setFileData] = useState(null);
 
-  const requiredColumns = ['time', 'flux', 'flux error'];
+  const requiredColumns = ['star_id','time', 'flux', 'flux_err'];
 
   const handleDragOver = (e) => {
     e.preventDefault();
@@ -71,7 +71,7 @@ function ForResearchers() {
   };
 
   const downloadTemplate = () => {
-    const csv = 'time,flux,flux error\n0,1.0,0.1\n1,0.99,0.1\n2,0.98,0.1';
+    const csv = 'star_id,time,flux,flux_err\n1,0,1.0,0.1\n1,1,0.99,0.1\n1,2,0.98,0.1';
     const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
     const url = URL.createObjectURL(blob);
     const link = document.createElement('a');
@@ -205,3 +205,4 @@ function ForResearchers() {
 }
 
 export default ForResearchers;
+
