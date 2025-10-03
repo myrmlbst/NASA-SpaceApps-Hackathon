@@ -42,7 +42,6 @@
 - ROC AUC and PR AUC
 - Log Loss and Brier Score
 
-## Installation
 ## Prerequisites
 - Python 3.7+
 - Required Python packages (see `requirements.txt`)   
@@ -71,7 +70,7 @@
 └── README.md                  
 ```
 
-## 📝 Data Format
+## Data Format
 
 ### Input Data Requirements
 CSV files should contain the following columns:
