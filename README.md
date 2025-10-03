@@ -8,14 +8,41 @@
 
 **A World Away** is a machine learning-powered system designed to detect potential exoplanets by analyzing light curve data from the Kepler Space Telescope. This project was developed for the NASA Space Apps Challenge and provides researchers with a powerful tool for identifying exoplanet candidates in astronomical data.
 
+The frontend is built with React and Vite, featuring an interactive interface that allows users to upload light curve data, view analysis results, and explore exoplanet characteristics through visualizations and interactive components.
+
 ## Features
+
+### Core Functionality
 - **Automated Data Processing**: Processes raw light curve data into meaningful features
 - **Machine Learning Pipeline**: Implements a robust classification model for exoplanet detection
 - **Comprehensive Analysis**: Calculates various transit characteristics and stellar parameters
-- **Web Interface**: User-friendly interface for data upload and analysis
-- **Detailed Reporting**: Provides probability scores and confidence metrics for detections
+
+### Frontend Features
+- **Interactive Data Upload**: Drag-and-drop interface for uploading light curve data
+- **Real-time Visualization**: Interactive charts and graphs for data exploration
+- **Responsive Design**: Works seamlessly on desktop and tablet devices
+- **Interactive Playground**: Beginner-friendly interface for exploring exoplanet concepts
+- **Detailed Reporting**: Visual representation of analysis results with confidence metrics
+- **Dark Mode**: Eye-friendly dark theme for extended research sessions
 
 ## System Architecture
+
+### Frontend Architecture
+1. **Core Technologies**
+   - React 19 with Vite for fast development and building
+   - Tailwind CSS for utility-first styling
+   - React Router for client-side navigation
+
+2. **Main Components**
+   - **ForResearchers.jsx**: Interface for researchers to upload and analyze light curve data
+   - **AboutPhysics.jsx**: Educational content about astrophysics and exoplanet research
+   - **AboutModel.jsx**: Technical details about the ML model and its performance
+   - **Playground.jsx**: Interactive tools for exploring exoplanet concepts
+
+3. **State Management**
+   - React Hooks for component-level state
+   - Context API for global state management
+   - React Query for server state and data fetching
 
 ### Backend Components
 1. **Data Processing Pipeline**
@@ -38,35 +65,35 @@
 
 ### Performance Metrics
 - Accuracy and Balanced Accuracy
-- Precision, Recall, and F1 Score
-- ROC AUC and PR AUC
-- Log Loss and Brier Score
-
-## Prerequisites
-- Python 3.7+
-- Required Python packages (see `requirements.txt`)   
 
 ## Project Structure
 
 ```
 ├── backend/                     
-│   ├── data/                    
-│   │   ├── input-test.csv       
-│   │   ├── detailed_data.csv    # process light curves
-│   │   └── features.csv         # extract features
-│   ├── model/                  
-│   │   ├── model.pkl            # trained model
-│   │   └── metrics.json         # performance metrics
-│   ├── format-data.py           # data preprocessing
-│   ├── ml-model.py              # training
-│   ├── star_aggregator.py       # feature extraction
-│   └── input-test.py            # prediction script
+│   ├── input-test.csv       
+│   ├── detailed_data.csv         # process light curves
+│   ├── features.csv              # extract features
+│   └── model/                  
+│       ├── model.pkl                 # trained model
+│       └── metrics.json              # performance metrics
+│   ├── format-data.py                # data preprocessing
+│   ├── ml-model.py                   # training
+│   ├── star_aggregator.py            # feature extraction
+│   └── input-test.py                 # prediction script
 ├── frontend/                   
-│   ├── public/
 │   └── src/
-│       ├── components/         # reusable UI components
-│       ├── pages/              # application pages
-│       └── App.jsx             # main application component
+│       ├── components/              # reusable UI components
+│       │   └── calculator/          # habitability calculator components
+│       │   ├── game/                # game components
+│       │   └── ui/                  # base UI components (buttons, animations, etc.)
+│       ├── pages/                   
+│       │   ├── AboutModel.jsx       # model technical details
+│       │   └──  AboutPhysics.jsx     # astrophysics and photometry content
+│       │   ├── ForResearchers.jsx   # data analysis interface
+│       │   └── Playground.jsx       # interactive tools for non-technical users
+│       ├── App.jsx                  
+│       ├── main.jsx           
+│       └── index.css                
 └── README.md                  
 ```
 
@@ -90,4 +117,3 @@ Contributions are welcome! Feel free to submit a pull request:
 
 ## License
 This project is licensed under the MIT License - see the LICENSE file for details.
-

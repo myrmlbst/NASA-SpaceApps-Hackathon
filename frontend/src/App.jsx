@@ -29,7 +29,7 @@ function App() {
       <Routes>
         
         <Route path="/" element={
-          <div className="min-h-screen">
+          <div className="min-h-screen bg-gray-950">
             <Hero />
             <Dashboard />
           </div>

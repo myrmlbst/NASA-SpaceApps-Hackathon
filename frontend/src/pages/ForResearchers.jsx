@@ -1,3 +1,4 @@
+
 import React, { useState, useRef, useCallback } from 'react';
 import Papa from 'papaparse';
 import axios from 'axios';
@@ -187,39 +188,72 @@ function ForResearchers() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-900 text-white p-4 sm:p-6 md:p-8 pt-16 sm:pt-20">
+    <div className="min-h-screen bg-gray-950 text-white p-4 sm:p-6 md:p-8 pt-16 sm:pt-20">
       <div className="container mx-auto">
         <BackButton />
         
-        <div className="max-w-4xl mx-auto">
+        <div className="max-w-7xl mx-auto">
           <div className="text-center mb-12">
             <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-4 text-test-500">For Researchers</h1>
-            <p className="text-xl text-gray-300 mt-2">Upload and analyze your light curve data</p>
-            <div className="w-full max-w-3xl h-1 bg-test-500 mx-auto my-4"></div>
+            <p className="text-lg sm:text-xl text-gray-300 max-w-3xl mx-auto">Upload and analyze your light curve data</p>
+            <div className="w-full max-w-3xl h-1 bg-test-500 mx-auto my-6"></div>
           </div>
           
-          {/* CSV Template Section */}
-          <div className="bg-gray-800 p-6 rounded-lg shadow-lg mb-8">
-            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
-              <div>
-                <h2 className="text-2xl font-bold text-test-400 mb-1">CSV Template</h2>
-                <p className="text-test-400">Download our template to ensure proper data formatting</p>
-              </div>
-              <Button 
-                onClick={downloadTemplate}
-                variant="default"
-                className="gap-2 text-gray-300 bg-gray-700 hover:bg-gray-600"
+          <div className="space-y-8">
+            <section className="bg-gray-900/30 p-6 sm:p-8 rounded-xl border border-gray-800/50">
+              <h2 className="text-2xl sm:text-3xl font-bold text-test-400 mb-6">Upload Light Curve Data</h2>
+              
+              <div 
+                className={`border-2 border-dashed rounded-lg p-6 sm:p-8 text-center cursor-pointer transition-colors ${isDragging ? 'border-test-500 bg-gray-800/50' : 'border-gray-700 hover:border-test-400'}`}
+                onDragOver={handleDragOver}
+                onDragLeave={handleDragLeave}
+                onDrop={handleDrop}
+                onClick={() => fileInputRef.current?.click()}
               >
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
-                </svg>
-                Download Template
-              </Button>
-            </div>
-            
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-              <div className="bg-gray-700/50 p-4 rounded-lg">
-                <div className="flex items-center gap-2 mb-2">
+                <div className="space-y-3">
+                  <svg className="mx-auto h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+                  </svg>
+                  <p className="text-sm text-gray-400">
+                    <span className="font-medium text-test-400">Click to upload</span> or drag and drop
+                  </p>
+                  <p className="text-xs text-gray-500">CSV file with light curve data (max 10MB)</p>
+                  {file && (
+                    <p className="mt-2 text-sm text-gray-300">
+                      Selected: <span className="font-mono">{file.name}</span>
+                    </p>
+                  )}
+                  <input
+                    type="file"
+                    ref={fileInputRef}
+                    className="hidden"
+                    accept=".csv"
+                    onChange={handleFileChange}
+                  />
+                </div>
+              </div>
+
+              <div className="mt-6 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+                <button
+                  onClick={downloadTemplate}
+                  type="button"
+                  className="inline-flex items-center gap-2 px-6 py-3 bg-slate-900 hover:bg-slate-700 text-white font-medium rounded-lg transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-test-500"
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                  </svg>
+                  Download Template
+                </button>
+                {file && (
+                  <div className="text-sm text-gray-300">
+                    Selected file: <span className="font-mono text-test-300">{file.name}</span>
+                  </div>
+                )}
+              </div>
+              
+              <div className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="bg-gray-700/50 p-4 rounded-lg">
+                  <div className="flex items-center gap-2 mb-2">
                   <div className="w-2 h-2 rounded-full bg-test-400"></div>
                   <h3 className="font-mono text-test-400">Required Columns</h3>
                 </div>
@@ -268,81 +302,57 @@ function ForResearchers() {
                   </pre>
                 </div>
               </div>
-            </div>
-            
-            <div 
-              className={`border-2 border-dashed rounded-lg p-8 text-center cursor-pointer transition-colors ${isDragging ? 'border-test-500 bg-gray-750' : 'border-gray-600'}`}
-              onDragOver={handleDragOver}
-              onDragLeave={handleDragLeave}
-              onDrop={handleDrop}
-              onClick={() => fileInputRef.current?.click()}
-            >
-              <input
-                type="file"
-                ref={fileInputRef}
-                className="hidden"
-                accept=".csv"
-                onChange={handleFileChange}
-              />
-              <div className="space-y-2">
-                <svg className="mx-auto h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
-                </svg>
-                <p className="text-lg font-medium">
-                  {file ? file.name : 'Drag and drop your CSV file here, or click to browse'}
-                </p>
-                <p className="text-sm text-gray-400">
-                  Only CSV files with star_id, time, flux, and flux_err columns are accepted
-                </p>
               </div>
-            </div>
-            
-            {error && (
-              <div className="mt-4 p-3 bg-red-900/50 border border-red-500 text-red-200 rounded">
-                {error}
+              
+              {error && (
+                <div className="mt-6 p-4 bg-red-500/20 border border-red-500/30 rounded-lg">
+                  <p className="text-red-300 text-sm">{error}</p>
+                </div>
+              )}
+              
+              {fileData && (
+                <div className="mt-6 p-4 bg-green-500/20 border border-green-500/30 rounded-lg">
+                  <p className="text-green-300 text-sm">Successfully loaded {fileData.length} data points</p>
+                </div>
+              )}
+              
+              <div className="mt-6">
+                <button
+                  onClick={handleSubmit}
+                  disabled={!fileData || isLoading}
+                  className={`w-full py-3 px-6 rounded-lg font-medium text-white transition-colors ${
+                    !fileData || isLoading
+                      ? 'bg-gray-600 cursor-not-allowed'
+                      : 'bg-test-500 hover:bg-test-600'
+                  }`}
+                >
+                  {isLoading ? 'Processing...' : 'Analyze Data'}
+                </button>
               </div>
+            </section>
+            
+            {/* Results Section */}
+            {prediction !== null && (
+              <section className="bg-gray-900/30 p-6 sm:p-8 rounded-xl border border-gray-800/50">
+                <h2 className="text-2xl sm:text-3xl font-bold text-test-400 mb-6">Analysis Results</h2>
+                <div className="p-6 bg-gray-800/50 rounded-lg">
+                  <p className="text-lg text-gray-300 mb-4">The probability of this star having an exoplanet is:</p>
+                  <div className="text-5xl font-bold text-test-400 my-6 text-center">
+                    {prediction.toFixed(2)}%
+                  </div>
+                  <div className="w-full bg-gray-700 rounded-full h-3 mt-6">
+                    <div 
+                      className="bg-gradient-to-r from-test-500 to-test-700 h-3 rounded-full"
+                      style={{ width: `${prediction}%` }}
+                    ></div>
+                  </div>
+                  <p className="text-sm text-gray-400 mt-3 text-center">
+                    Confidence: <span className="font-medium">{prediction > 70 ? 'High' : prediction > 30 ? 'Medium' : 'Low'}</span>
+                  </p>
+                </div>
+              </section>
             )}
-            
-            {fileData && (
-              <div className="mt-4 p-3 bg-green-900/30 border border-green-500 text-green-200 rounded">
-                Successfully loaded {fileData.length} data points
-              </div>
-            )}
-            
-            <button
-              onClick={handleSubmit}
-              disabled={!fileData || isLoading}
-              className={`mt-6 w-full py-3 px-4 rounded-lg font-bold transition-colors ${
-                !fileData || isLoading
-                  ? 'bg-gray-600 cursor-not-allowed'
-                  : 'bg-test-600 hover:bg-test-700'
-              }`}
-            >
-              {isLoading ? 'Processing...' : 'Analyze Data'}
-            </button>
           </div>
-          
-          {/* Results Section */}
-          {prediction !== null && (
-            <div className="bg-gray-800 p-6 rounded-lg shadow-lg">
-              <h2 className="text-2xl font-bold mb-4 text-test-400">Analysis Results</h2>
-              <div className="text-center p-8 bg-gray-700/50 rounded-lg">
-                <p className="text-lg mb-2">The probability of this star having an exoplanet is:</p>
-                <div className="text-5xl font-bold text-test-400 my-4">
-                  {prediction.toFixed(2)}%
-                </div>
-                <div className="w-full bg-gray-600 rounded-full h-4 mt-6">
-                  <div 
-                    className="bg-gradient-to-r from-test-500 to-test-700 h-4 rounded-full"
-                    style={{ width: `${prediction}%` }}
-                  ></div>
-                </div>
-                <p className="text-sm text-gray-400 mt-2">
-                  Confidence: {prediction > 70 ? 'High' : prediction > 30 ? 'Medium' : 'Low'}
-                </p>
-              </div>
-            </div>
-          )}
         </div>
       </div>
     </div>
@@ -350,4 +360,3 @@ function ForResearchers() {
 }
 
 export default ForResearchers;
-
