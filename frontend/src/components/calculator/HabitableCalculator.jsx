@@ -37,13 +37,13 @@ const HabitableCalculator = () => {
     return Math.pow(flux / (4 * sigma), 0.25).toFixed(0);
   };
 
-  // Determine habitability
+  // determine habitability
   const isHabitable = () => {
     const habZone = calculateHabitableZone(starTemp);
     const temp = equilibriumTemp(starTemp, distance);
     const gravity = surfaceGravity(planetMass, planetRadius);
     
-    // Simple habitability check
+    // habitability check
     const inHabitableZone = distance >= habZone.inner && distance <= habZone.outer;
     const reasonableGravity = gravity >= 0.5 && gravity <= 2.0;
     const reasonableTemp = temp > 200 && temp < 350; // Kelvin
@@ -75,6 +75,7 @@ const HabitableCalculator = () => {
               onChange={(e) => setDistance(parseFloat(e.target.value))}
               className="w-full h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer"
             />
+
             <div className="flex justify-between text-xs text-gray-400 mt-1">
               <span>0.1 AU</span>
               <span>5 AU</span>
@@ -85,6 +86,7 @@ const HabitableCalculator = () => {
             <label className="block text-sm font-medium text-gray-300 mb-2">
               Star Temperature: {starTemp} K
             </label>
+            
             <input
               type="range"
               min="2500"
@@ -94,6 +96,7 @@ const HabitableCalculator = () => {
               onChange={(e) => setStarTemp(parseInt(e.target.value))}
               className="w-full h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer"
             />
+            
             <div className="flex justify-between text-xs text-gray-400 mt-1">
               <span>2500K (Red Dwarf)</span>
               <span>10000K (Blue Star)</span>

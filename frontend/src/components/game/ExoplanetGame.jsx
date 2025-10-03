@@ -10,7 +10,6 @@ const ExoplanetGame = () => {
   const [timeLeft, setTimeLeft] = useState(30);
   const [hintUsed, setHintUsed] = useState(false);
 
-  // Sample exoplanet data (in a real app, this could come from an API)
   const exoplanetData = [
     // Level 1 - Easy (obvious dips)
     {
@@ -63,7 +62,9 @@ const ExoplanetGame = () => {
 
   // Handle planet selection
   const handlePlanetSelect = (hasPlanet) => {
-    if (gameState !== 'playing') return;
+    if (gameState !== 'playing') { 
+      return;
+    }
     
     setSelectedPlanet(hasPlanet);
     
