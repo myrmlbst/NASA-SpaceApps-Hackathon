@@ -96,7 +96,7 @@ const HabitableCalculator = () => {
               onChange={(e) => setStarTemp(parseInt(e.target.value))}
               className="w-full h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer"
             />
-            
+
             <div className="flex justify-between text-xs text-gray-400 mt-1">
               <span>2500K (Red Dwarf)</span>
               <span>10000K (Blue Star)</span>
@@ -107,6 +107,7 @@ const HabitableCalculator = () => {
             <label className="block text-sm font-medium text-gray-300 mb-2">
               Planet Mass: {planetMass} Earth masses
             </label>
+
             <input
               type="range"
               min="0.1"
@@ -116,6 +117,7 @@ const HabitableCalculator = () => {
               onChange={(e) => setPlanetMass(parseFloat(e.target.value))}
               className="w-full h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer"
             />
+
             <div className="flex justify-between text-xs text-gray-400 mt-1">
               <span>0.1x Earth</span>
               <span>10x Earth</span>
@@ -126,6 +128,7 @@ const HabitableCalculator = () => {
             <label className="block text-sm font-medium text-gray-300 mb-2">
               Planet Radius: {planetRadius} Earth radii
             </label>
+
             <input
               type="range"
               min="0.5"
@@ -135,6 +138,7 @@ const HabitableCalculator = () => {
               onChange={(e) => setPlanetRadius(parseFloat(e.target.value))}
               className="w-full h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer"
             />
+
             <div className="flex justify-between text-xs text-gray-400 mt-1">
               <span>0.5x Earth</span>
               <span>4x Earth</span>
@@ -149,6 +153,7 @@ const HabitableCalculator = () => {
             }`}>
               {habitable ? 'POTENTIALLY HABITABLE' : 'NOT HABITABLE'}
             </div>
+
             <div className="text-sm text-gray-400">
               Based on current parameters
             </div>
@@ -160,6 +165,7 @@ const HabitableCalculator = () => {
                 <span className="text-gray-300">Habitable Zone</span>
                 <span className="font-mono">{habZone.inner} - {habZone.outer} AU</span>
               </div>
+
               <div className="w-full bg-gray-700 rounded-full h-2.5">
                 <div 
                   className="bg-test-500 h-2.5 rounded-full" 
@@ -181,6 +187,7 @@ const HabitableCalculator = () => {
                     style={{ left: `${(distance / 5) * 100}%` }}
                   ></div>
                 </div>
+
                 <div className="text-xs text-gray-400 mt-1 flex justify-between">
                   <span>0 AU</span>
                   <span>5 AU</span>
