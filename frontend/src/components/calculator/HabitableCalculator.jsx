@@ -6,14 +6,13 @@ const HabitableCalculator = () => {
   const [planetMass, setPlanetMass] = useState(1.0); // Earth masses
   const [planetRadius, setPlanetRadius] = useState(1.0); // Earth radii
 
-  // Calculate habitable zone boundaries (simplified)
   const calculateHabitableZone = (starTemp) => {
     // Very simplified habitable zone calculation
     const sunTemp = 5780; // Kelvin
     const sunHabitableInner = 0.95; // AU
     const sunHabitableOuter = 1.37; // AU
     
-    // Scale based on star temperature (simplified)
+    // scale based on star temperature (simplified)
     const ratio = Math.pow(starTemp / sunTemp, 2);
     return {
       inner: (sunHabitableInner * ratio).toFixed(2),
@@ -21,17 +20,17 @@ const HabitableCalculator = () => {
     };
   };
 
-  // Calculate surface gravity (Earth = 1)
+  // calculate surface gravity (Earth = 1)
   const surfaceGravity = (mass, radius) => {
     return (mass / (radius * radius)).toFixed(2);
   };
 
-  // Calculate equilibrium temperature (simplified)
+  // calculate equilibrium temperature (simplified)
   const equilibriumTemp = (starTemp, distance) => {
-    // Using simplified black body temperature formula
+    // using simplified black body temperature formula
     const sigma = 5.67e-8; // Stefan-Boltzmann constant
-    const luminosity = Math.pow(starTemp / 5780, 4); // Relative to Sun
-    const distanceInAU = distance * 1.496e11; // Convert AU to meters
+    const luminosity = Math.pow(starTemp / 5780, 4); // relative to sun
+    const distanceInAU = distance * 1.496e11; // convert AU to meters
     const solarConstant = 1361; // W/m² at Earth's distance
     const flux = (luminosity * solarConstant) / Math.pow(distance, 2);
     return Math.pow(flux / (4 * sigma), 0.25).toFixed(0);
@@ -195,6 +194,7 @@ const HabitableCalculator = () => {
               </div>
             </div>
 
+
             <div className="grid grid-cols-2 gap-4">
               <div className="bg-gray-800/50 p-3 rounded-lg">
                 <div className="text-xs text-gray-400">Equilibrium Temp</div>
@@ -203,6 +203,7 @@ const HabitableCalculator = () => {
                   {temp > 373 ? 'Too Hot' : temp > 273 ? 'Liquid water possible' : 'Too Cold'}
                 </div>
               </div>
+
               <div className="bg-gray-800/50 p-3 rounded-lg">
                 <div className="text-xs text-gray-400">Surface Gravity</div>
                 <div className="text-lg font-mono">{gravity} g</div>
@@ -210,6 +211,7 @@ const HabitableCalculator = () => {
                   {gravity < 0.5 ? 'Too Low' : gravity > 2 ? 'Too High' : 'Earth-like'}
                 </div>
               </div>
+
               <div className="bg-gray-800/50 p-3 rounded-lg">
                 <div className="text-xs text-gray-400">Star Type</div>
                 <div className="text-lg">
@@ -219,6 +221,7 @@ const HabitableCalculator = () => {
                    starTemp < 7500 ? 'F-type' : 'A-type or hotter'}
                 </div>
               </div>
+
               <div className="bg-gray-800/50 p-3 rounded-lg">
                 <div className="text-xs text-gray-400">Planet Type</div>
                 <div className="text-lg">
@@ -233,6 +236,7 @@ const HabitableCalculator = () => {
               <p>For reference: Earth = 1 AU, 1 Earth mass, 1 Earth radius</p>
             </div>
           </div>
+          
         </div>
       </div>
     </div>

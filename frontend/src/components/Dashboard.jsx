@@ -38,7 +38,7 @@ function Dashboard() {
   ];
 
   return (
-    <section id="dashboard" className="min-h-screen bg-gray-900 text-white p-4 sm:p-6 md:p-8 pt-16 sm:pt-20 scroll-mt-16">
+    <section id="dashboard" className="min-h-screen bg-gray-950 text-white p-4 sm:p-6 md:p-8 pt-16 sm:pt-20 scroll-mt-16">
       <div className="max-w-7xl mx-auto">
         <div className="text-center mb-12">
           <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-4 text-test-500">

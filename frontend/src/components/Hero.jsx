@@ -20,7 +20,7 @@ function Hero() {
   };
 
   return (
-    <section className="min-h-screen flex flex-col items-center justify-center text-center px-4 relative overflow-hidden">
+    <section className="min-h-screen flex flex-col items-center justify-center text-center px-4 relative overflow-hidden bg-gray-950">
       <Starfield />
       
       <div className="max-w-4xl relative z-10">
