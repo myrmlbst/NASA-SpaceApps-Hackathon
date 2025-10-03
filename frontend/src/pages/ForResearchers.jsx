@@ -142,14 +142,6 @@ function ForResearchers() {
             )}
 
             <div className="mt-6 flex flex-col sm:flex-row gap-4 justify-center">
-              <button
-                type="button"
-                onClick={downloadTemplate}
-                className="px-4 py-2 border border-test-500 text-test-400 rounded-lg hover:bg-test-500/10 transition-colors"
-              >
-                Download Template
-              </button>
-              
               {file && !error && (
                 <button
                   type="button"
@@ -164,6 +156,82 @@ function ForResearchers() {
                 </button>
               )}
             </div>
+
+            <h3 style={{marginTop: 20}} className="text-xl font-semibold mb-4">Data Template (how the data should be structured)</h3>
+            <table className="min-w-full divide-y divide-gray-700">
+              <thead>
+                <tr>
+                  <th className="px-4 py-2 text-left text-sm font-medium text-gray-300">
+                    star_id
+                  </th>
+                  <th className="px-4 py-2 text-left text-sm font-medium text-gray-300">
+                    flux
+                  </th>
+                  <th className="px-4 py-2 text-left text-sm font-medium text-gray-300">
+                    time
+                  </th>
+                  <th className="px-4 py-2 text-left text-sm font-medium text-gray-300">
+                    flux_err
+                  </th>
+                </tr> 
+              </thead>
+              <tbody className="divide-y divide-gray-700">
+                <tr>
+                  <td className="px-4 py-2 text-sm text-gray-300">
+                    1
+                  </td>
+                  <td className="px-4 py-2 text-sm text-gray-300">
+                    0
+                  </td>
+                  <td className="px-4 py-2 text-sm text-gray-300">
+                    1
+                  </td>
+                  <td className="px-4 py-2 text-sm text-gray-300">
+                    0.1
+                  </td>
+                </tr>
+                <tr>
+                  <td className="px-4 py-2 text-sm text-gray-300">
+                    1
+                  </td>
+                  <td className="px-4 py-2 text-sm text-gray-300">
+                    1
+                  </td>
+                  <td className="px-4 py-2 text-sm text-gray-300">
+                    0.99
+                  </td>
+                  <td className="px-4 py-2 text-sm text-gray-300">
+                    0.1
+                  </td>
+                </tr>
+                <tr>
+                  <td className="px-4 py-2 text-sm text-gray-300">
+                    1
+                  </td>
+                  <td className="px-4 py-2 text-sm text-gray-300">
+                    2
+                  </td>
+                  <td className="px-4 py-2 text-sm text-gray-300">
+                    0.98
+                  </td>
+                  <td className="px-4 py-2 text-sm text-gray-300">
+                    0.1
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+
+            <div className="mt-6 flex flex-col sm:flex-row gap-4 justify-center">
+
+            <button
+                type="button"
+                onClick={downloadTemplate}
+                className="px-4 py-2 border border-test-500 text-test-400 rounded-lg hover:bg-test-500/10 transition-colors"
+              >
+                Download Template
+              </button>
+
+              </div>
           </div>
 
           {fileData && (
