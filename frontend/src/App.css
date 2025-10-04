@@ -5,6 +5,9 @@
     --color-test: #31487a; /* #435c94; */
     --color-text-test: var(--color-test);
     --color-test-500: var(--color-test);
+    --color-black: #0f172a;
+    --color-text-black: var(--color-black);
+    --color-bg-black: var(--color-black);
 }
 
 /* Apply Exo 2 font to the entire application */

@@ -21,9 +21,9 @@ function Hero() {
 
   return (
     <section className="min-h-screen flex flex-col items-center justify-center text-center px-4 relative overflow-hidden bg-gray-950">
-      <Starfield />
-      
+
       <div className="max-w-4xl relative z-10">
+      <Starfield /> 
 
       <div className="flex justify-center mb-8">
           <img 
@@ -81,6 +81,8 @@ function Hero() {
             }
           `}</style>
         </div>
+
+        {/* <div className='bg-linear-to-b from-black to-[oklch(12.9% 0.042 264.695)]'>hdsugyd</div> */}
       </div>
 
     </section>
