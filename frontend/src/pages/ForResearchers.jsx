@@ -75,7 +75,7 @@ function ForResearchers() {
       console.log('Sending data to backend:', formattedData);
 
       // Send to backend for prediction
-      const response = await axios.post('http://localhost:5000/predict', {
+      const response = await axios.post('http://localhost:5050/predict', {
         data: formattedData
       }, {
         headers: {
@@ -84,7 +84,7 @@ function ForResearchers() {
       });
 
       if (response.data && response.data.probability !== undefined) {
-        setPrediction(response.data.probability);
+        setPrediction(response.data.probability * 100);
       } else {
         throw new Error('Invalid response from server');
       }

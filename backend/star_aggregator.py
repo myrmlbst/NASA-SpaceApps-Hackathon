@@ -5,7 +5,7 @@ from scipy.signal import lombscargle
 import os
 
 project_root = os.path.dirname(os.path.abspath(__file__)) 
-file_path = os.path.join(project_root, 'data', 'kepler_data.csv')
+file_path = os.path.join(project_root, 'data', 'data_step2.csv')
 
 # Load data
 df = pd.read_csv(file_path)
@@ -13,7 +13,7 @@ df = pd.read_csv(file_path)
 df = df.dropna()
 
 # Feature extractor
-def extract_features(group):
+def extract_features(group: pd.DataFrame):
     feats = {}
     flux = group["flux"].values
     flux_err = group["flux_err"].values
