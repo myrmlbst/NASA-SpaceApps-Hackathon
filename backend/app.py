@@ -7,6 +7,8 @@ import numpy as np
 import pandas as pd
 from scipy.stats import skew, kurtosis
 from scipy.signal import lombscargle
+from star_aggregator import extract_features
+from format_data import add_features
 
 app = Flask(__name__)
 
@@ -29,67 +31,6 @@ model_path = os.path.join(project_root, 'model', 'model.pkl')
 model_data = joblib.load(model_path)
 model = model_data["model"]
 
-# Feature extraction function (similar to what's in star_aggregator.py)
-def extract_features(star_data):
-    """Extract features from light curve data for a single star"""
-    try:
-        df = pd.DataFrame(star_data)
-        
-        # Basic statistics
-        flux = df['flux'].values
-        time = df['time'].values
-        err = df['flux_err'].values
-        
-        # Calculate depth (minimum flux normalized by median)
-        depth = 1 - (np.min(flux) / np.median(flux))
-        
-        # Calculate duration (time between first and last point)
-        duration = np.max(time) - np.min(time)
-        
-        # Calculate ingress and egress times (simplified as first and last 10% of points)
-        n_points = len(flux)
-        ingress_points = int(n_points * 0.1)
-        egress_points = int(n_points * 0.1)
-        
-        ingress_time = time[ingress_points] - time[0]
-        egress_time = time[-1] - time[-egress_points]
-        
-        # Calculate ratio of ingress to egress
-        ratio_ingress_egress = ingress_time / egress_time if egress_time > 0 else 0
-        
-        # Calculate depth over duration
-        depth_over_duration = depth / duration if duration > 0 else 0
-        
-        # Create features dictionary matching the training data format
-        features = {
-            'flux_mean': np.mean(flux),
-            'flux_std': np.std(flux),
-            'flux_skew': skew(flux),
-            'flux_kurt': kurtosis(flux),
-            'err_mean': np.mean(err),
-            'err_std': np.std(err),
-            'depth_mean': depth,
-            'depth_std': 0,  # Not enough points for meaningful std
-            'duration_mean': duration,
-            'duration_std': 0,  # Not enough points for meaningful std
-            'ingress_mean': ingress_time,
-            'egress_mean': egress_time,
-            'ratio_ingress_egress': ratio_ingress_egress,
-            'depth_over_duration': depth_over_duration,
-            # The following are stellar parameters that should ideally come from a catalog
-            'teff': 5778,  # Default to solar temperature
-            'radius': 1.0,  # Default to solar radius
-            'mass': 1.0,   # Default to solar mass
-            'logg': 4.44,  # Default to solar surface gravity
-            'feh': 0.0     # Default to solar metallicity
-        }
-        
-        return features
-        
-    except Exception as e:
-        print(f"Error extracting features: {e}")
-        return None
-
 @app.route('/predict', methods=['POST'])
 @cross_origin(origins=['http://localhost:5173', 'http://127.0.0.1:5173'],
               methods=['POST'],
@@ -104,15 +45,19 @@ def predict():
             return jsonify({"error": "No data provided"}), 400
             
         # Extract features
-        features = extract_features(data)
-        if not features:
-            return jsonify({"error": "Could not extract features from data"}), 400
+        data = pd.DataFrame(data)
+        features = add_features(data)
+        # if not features:
+        #     return jsonify({"error": "Could not extract features from data"}), 400
             
-        # Convert to DataFrame for prediction
-        X = pd.DataFrame([features])
-        
+        features = features.groupby("star_id").apply(extract_features).reset_index()
+
+        features = features.drop(columns="star_id")
+        if 'label' in features.columns:
+            features = features.drop(columns="label")
+                
         # Make prediction and get probabilities for all classes
-        probabilities = model.predict_proba(X)[0]
+        probabilities = model.predict_proba(features)[0]
         probability = float(probabilities[1])  # Probability of class 1 (exoplanet)
         
         # Calculate standard error of the prediction (as a simple approximation of uncertainty)
