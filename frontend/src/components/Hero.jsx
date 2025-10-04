@@ -20,6 +20,7 @@ function Hero() {
   };
 
   return (
+    <div>
     <section className="min-h-screen flex flex-col items-center justify-center text-center px-4 relative overflow-hidden bg-gray-950">
 
       <div className="max-w-4xl relative z-10">
@@ -81,11 +82,16 @@ function Hero() {
             }
           `}</style>
         </div>
-
-        {/* <div className='bg-linear-to-b from-black to-[oklch(12.9% 0.042 264.695)]'>hdsugyd</div> */}
       </div>
 
     </section>
+
+    {/* gradient background at the bottom of the hero section */}
+      <div className='w-full bg-linear-to-t from-slate-950 to-black h-64'>
+        ‎
+      </div>
+
+      </div>
   )
 }
 

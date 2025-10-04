@@ -55,9 +55,10 @@ function Dashboard() {
           </p>
         </div>
         
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-12">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-12">
           {navigationItems.map((item, index) => (
             <button
+              style={{cursor: 'pointer'}}
               key={index}
               onClick={() => navigate(item.path)}
               className="group bg-gray-800 p-8 rounded-xl hover:bg-gray-700 transition-all duration-300 transform hover:-translate-y-1 text-left"

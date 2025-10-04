@@ -68,13 +68,27 @@ def fetch_by_kic(kic_id: int):
 def add_features(df: pd.DataFrame):
     star_id = uniform_first_col_value(df)
     data = fetch_by_kic(star_id)
+    stellarParamsAvailable = False
 
-    df['label'] = data['label']
-    df['teff'] = data['teff']
-    df['radius'] = data['radius']
-    df['mass'] = data['mass']
-    df['logg'] = data['logg']
-    df['feh'] = data['feh']
+    if ('teff' in df.columns) \
+        and ('radius' in df.columns) \
+        and ('mass' in df.columns) \
+        and ('logg' in df.columns) \
+        and ('feh' in df.columns):
+
+        stellarParamsAvailable = True
+
+    if not stellarParamsAvailable:
+        if data is not None:
+            df['label'] = data['label']
+            df['teff'] = data['teff']
+            df['radius'] = data['radius']
+            df['mass'] = data['mass']
+            df['logg'] = data['logg']
+            df['feh'] = data['feh']
+        
+        else:
+            raise ValueError("Star not available in the database, please manually enter the star's: teff, radius, mass, logg, feh.")
 
     # Add empty columns for new features
     df["depth"] = np.nan
