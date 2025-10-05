@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { scaleToUnit, median, downsampleYToN } from '../../lib/utils';
 
 const ExoplanetGame = () => {
   const [level, setLevel] = useState(1);
@@ -10,42 +11,18 @@ const ExoplanetGame = () => {
   const [timeLeft, setTimeLeft] = useState(30);
   const [hintUsed, setHintUsed] = useState(false);
 
-  const exoplanetData = [
-    // Level 1 - Easy (obvious dips)
-    {
-      id: 1,
-      name: 'Kepler-186f',
-      period: 129.9, // days
-      depth: 0.03, // %
-      data: Array(100).fill(1).map((_, i) => {
-        // Create a light curve with a clear dip
-        if (i > 40 && i < 60) return 0.97 + (Math.random() * 0.02);
-        return 1 - (Math.random() * 0.01);
-      })
-    },
-    // Level 2 - Medium (slightly less obvious)
-    {
-      id: 2,
-      name: 'TRAPPIST-1e',
-      period: 6.1,
-      depth: 0.08,
-      data: Array(100).fill(1).map((_, i) => {
-        if (i > 45 && i < 55) return 0.92 + (Math.random() * 0.03);
-        return 1 - (Math.random() * 0.02);
-      })
-    },
-    // Level 3 - Hard (very subtle)
-    {
-      id: 3,
-      name: 'Proxima Centauri b',
-      period: 11.2,
-      depth: 0.02,
-      data: Array(100).fill(1).map((_, i) => {
-        if (i > 48 && i < 52) return 0.98 + (Math.random() * 0.01);
-        return 1 - (Math.random() * 0.01);
-      })
-    }
-  ];
+  const [roundsCompleted, setRoundsCompleted] = useState(0);
+  const [rounds, setRounds] = useState([]); // each item: { id, score, finishedAt }
+
+
+  async function fetchRandomBlock() {
+    const res = await fetch(`http://localhost:5050/lightcurve/random`);
+    if (!res.ok) throw new Error("Failed to load light curve");
+    const json = await res.json();
+    console.log(JSON.stringify(json));
+    
+    return json;
+  }
 
   // Start a new level
   const startLevel = () => {
@@ -56,8 +33,7 @@ const ExoplanetGame = () => {
     setSelectedPlanet(null);
     
     // Select a random exoplanet for this level
-    const levelData = exoplanetData[level - 1];
-    setCurrentData(levelData);
+    fetchRandomBlock().then(setCurrentData).catch(console.error);
   };
 
   // Handle planet selection
@@ -65,21 +41,29 @@ const ExoplanetGame = () => {
     if (gameState !== 'playing') { 
       return;
     }
-    
     setSelectedPlanet(hasPlanet);
     
     // Check if correct
-    const correct = hasPlanet;
+    const correct = hasPlanet === (currentData.label === 1);
     if (correct) {
       const points = hintUsed ? 5 : 10;
-      setScore(prev => prev + points);
+      // setScore(prev => prev + points);
+      const finalScore = score + points;           // compute before setState
+      setScore(finalScore);
       setFeedback(`Correct! Planet detected! +${points} points`);
       
       // Move to next level or complete game
       if (level < 3) {
         setGameState('levelComplete');
       } else {
+        // Round (3 levels) completed
+        setRounds(prev => [
+          ...prev,
+          { id: prev.length + 1, score: finalScore, finishedAt: Date.now() }
+        ]);
+
         setGameState('gameOver');
+        // setRoundsCompleted(r => r + 1);
       }
     } else {
       setScore(prev => Math.max(0, prev - 5));
@@ -131,6 +115,13 @@ const ExoplanetGame = () => {
   // Render the light curve
   const renderLightCurve = () => {
     if (!currentData) return null;
+    const oneHundred = downsampleYToN(currentData.data, 100);
+
+    const flux = Object.values(oneHundred);
+
+    const { scaled } = scaleToUnit(flux, { robust: true });
+
+    const base = median(flux);
     
     return (
       <div className="w-full h-64 bg-gray-900 rounded-lg p-4 relative">
@@ -138,18 +129,23 @@ const ExoplanetGame = () => {
           <div className="w-full h-px bg-gray-700"></div>
         </div>
         <div className="relative h-full w-full">
-          {currentData.data.map((value, i) => (
-            <div 
-              key={i}
-              className="absolute bottom-0 w-1 h-full bg-test-500/30"
-              style={{
-                left: `${i}%`,
-                height: `${value * 100}%`,
-                transform: 'translateX(-50%)',
-                backgroundColor: value < 0.99 ? '#3B82F6' : '#3B82F680'
-              }}
-            />
-          ))}
+          {scaled.map((h, idx) => {
+            const raw = flux[idx]; // keep raw for color logic if desired
+            const isDip = raw < base * 0.995; // ~0.5% below baseline → dip
+
+            return (
+              <div
+                key={idx}
+                className="absolute bottom-0 w-1 z-10"
+                style={{
+                  left: `${idx}%`,
+                  height: `${h * 100}%`,          // scaled height fits container
+                  transform: 'translateX(-50%)',
+                  backgroundColor: isDip ? '#3B82F6' : '#3B82F680',
+                }}
+              />
+            );
+          })}
         </div>
         <div className="absolute bottom-0 left-0 right-0 flex justify-between text-xs text-gray-400 px-2">
           <span>0 days</span>
@@ -304,25 +300,87 @@ const ExoplanetGame = () => {
     }
   };
 
+
   return (
-    <div className="bg-gray-800/50 backdrop-blur-sm rounded-xl p-6 shadow-lg">
-      <h2 className="text-2xl font-bold mb-6 text-test-400 text-center">Exoplanet Discovery Game</h2>
-      <div className="max-w-3xl mx-auto">
-        {renderGameScreen()}
-      </div>
-      
-      {(gameState === 'playing' || gameState === 'start') && (
-        <div className="mt-8 p-4 bg-gray-900/50 rounded-lg">
-          <h3 className="font-semibold mb-2">How to Play:</h3>
-          <ul className="text-sm text-gray-300 space-y-1">
-            <li>• Analyze the light curve for periodic dips in brightness</li>
-            <li>• Click "Planet Detected" if you see a consistent dip pattern</li>
-            <li>• Click "No Planet" if the data looks like random noise</li>
-            <li>• Use hints if you're stuck, but they'll cost you points!</li>
-            <li>• Be quick! You have limited time for each level</li>
-          </ul>
+    <div>
+      <div className="bg-gray-800/50 backdrop-blur-sm rounded-xl p-6 shadow-lg">
+        <h2 className="text-2xl font-bold mb-6 text-test-400 text-center">
+          Exoplanet Discovery Game
+        </h2>
+        
+        <div className="max-w-3xl mx-auto">
+          {renderGameScreen()}
         </div>
+        
+        {(gameState === 'playing' || gameState === 'start') && (
+          <div className="mt-8 p-4 bg-gray-900/50 rounded-lg">
+            <h3 className="font-semibold mb-2">How to Play:</h3>
+            <ul className="text-sm text-gray-300 space-y-1">
+              <li>• Analyze the light curve for periodic dips in brightness</li>
+              <li>• Click "Planet Detected" if you see a consistent dip pattern</li>
+              <li>• Click "No Planet" if the data looks like random noise</li>
+              <li>• Use hints if you're stuck, but they'll cost you points!</li>
+              <li>• Be quick! You have limited time for each level</li>
+            </ul>
+          </div>
+        )}
+      </div>
+     
+
+      {(gameState === 'levelComplete' || gameState === 'gameOver') && (
+        <section className="mt-8">
+          <div className="mx-auto max-w-4xl rounded-2xl bg-gray-800/50 backdrop-blur-sm p-6 shadow-xl ring-1 ring-white/10">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-start">
+              
+              {/* Attempts (takes 2/3 width on md+) */}
+              <div className="md:col-span-2 min-w-0">
+                <h2 className="text-xl font-semibold mb-3 text-test-400">Attempts</h2>
+                <ul className="space-y-2 max-h-56 overflow-y-auto pr-2">
+                  {rounds.length === 0 ? (
+                    <li className="text-gray-500 text-sm">No completed rounds yet.</li>
+                  ) : (
+                    rounds.map((r) => (
+                      <li
+                        key={r.id}
+                        className="rounded-lg bg-gray-900/60 px-3 py-2 flex items-center justify-between"
+                      >
+                        <div className="flex items-baseline gap-3 min-w-0">
+                          <span className="inline-flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-test-500/20 text-test-400 text-xs font-semibold">
+                            {r.id}
+                          </span>
+                          
+                          <div className="min-w-0">
+                            <p className="truncate">Round {r.id}</p>
+                            <p className="text-xs text-gray-400">
+                              {new Date(r.finishedAt).toLocaleTimeString()}
+                            </p>
+                          </div>
+                        </div>
+                        <span className="font-semibold tabular-nums">{r.score} pts</span>
+                      </li>
+                    ))
+                  )}
+                </ul>
+              </div>
+
+              {/* Score (1/3 width on md+) */}
+              <div className="md:col-span-1">
+                <h2 className="text-xl font-semibold mb-3 text-test-400">Score</h2>
+                <div className="flex items-center justify-center rounded-xl bg-gray-900/60 py-8">
+                  <span className="text-5xl font-bold tracking-tight tabular-nums text-white">
+                    {score}
+                  </span>
+                </div>
+                <div className="mt-3 text-xs text-gray-400 text-center">
+                  Completed rounds:{' '}
+                  <span className="font-medium text-gray-200">{rounds.length}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
       )}
+
     </div>
   );
 };

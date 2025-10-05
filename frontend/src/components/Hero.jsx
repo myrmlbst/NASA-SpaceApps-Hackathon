@@ -25,8 +25,6 @@ function Hero() {
       <div className="max-w-4xl relative z-10">
       <Starfield /> 
 
-      <Starfield />
-
       <div className="flex justify-center mb-8">
           <img 
             src="/src/images/logos/adastra-blue-logo.jpeg" 
@@ -55,6 +53,7 @@ function Hero() {
 
         <Button 
           size="lg" 
+          style={{cursor: 'pointer'}}
           onClick={scrollToDashboard}
           className="relative z-20 bg-test-500 hover:bg-test-600 transition-colors duration-300 transform hover:scale-105"
         >
@@ -83,8 +82,6 @@ function Hero() {
             }
           `}</style>
         </div>
-
-        <div className='bg-linear-to-b from-black to-[oklch(12.9% 0.042 264.695)]'>hdsugyd</div>
       </div>
 
     </section>

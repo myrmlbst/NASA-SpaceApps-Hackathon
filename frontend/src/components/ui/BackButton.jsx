@@ -6,6 +6,7 @@ function BackButton() {
 
   return (
     <button
+      style={{cursor: 'pointer'}}
       onClick={() => navigate('/#dashboard')}
       className="flex items-center text-test-400 hover:text-test-300 transition-colors duration-200 mb-6 group"
     >

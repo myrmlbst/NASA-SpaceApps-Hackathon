@@ -23,12 +23,18 @@ const templateCSV = `star_id,time,flux,flux_err
 12345,0.26,0.999,0.001
 12345,0.28,1.000,0.001`;
 
+function roundToDecimal(num, decimalPlaces) {
+  const factor = Math.pow(10, decimalPlaces);
+  return Math.round(num * factor) / factor;
+}
+
 function ForResearchers() {
   const [file, setFile] = useState(null);
   const [error, setError] = useState('');
   const [isDragging, setIsDragging] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [prediction, setPrediction] = useState(null);
+  const [additionalData, setAdditionalData] = useState({});
   const fileInputRef = useRef(null);
   const [fileData, setFileData] = useState(null);
 
@@ -72,11 +78,9 @@ function ForResearchers() {
         return { star_id, time, flux, flux_err };
       });
 
-      console.log('Sending data to backend:', formattedData);
-
       // Send to backend for prediction
       const response = await axios.post('http://localhost:5050/predict', {
-        data: formattedData
+        data: formattedData,
       }, {
         headers: {
           'Content-Type': 'application/json'
@@ -85,6 +89,13 @@ function ForResearchers() {
 
       if (response.data && response.data.probability !== undefined) {
         setPrediction(response.data.probability * 100);
+        const data = response.data.additionalParams;
+
+        console.log(data);
+
+        setAdditionalData(data);
+
+        console.log(additionalData);
       } else {
         throw new Error('Invalid response from server');
       }
@@ -202,7 +213,7 @@ function ForResearchers() {
           <div className="space-y-8">
             <section className="bg-gray-900/30 p-6 sm:p-8 rounded-xl border border-gray-800/50">
               <h2 className="text-2xl sm:text-3xl font-bold text-test-400 mb-6">Upload Light Curve Data</h2>
-              
+              <p className="mb-6">Make sure the file has enough datapoints, if it doesn't, the model may return an error.</p>
               <div 
                 className={`border-2 border-dashed rounded-lg p-6 sm:p-8 text-center cursor-pointer transition-colors ${isDragging ? 'border-test-500 bg-gray-800/50' : 'border-gray-700 hover:border-test-400'}`}
                 onDragOver={handleDragOver}
@@ -349,6 +360,47 @@ function ForResearchers() {
                   <p className="text-sm text-gray-400 mt-3 text-center">
                     Confidence: <span className="font-medium">{prediction > 70 ? 'High' : prediction > 30 ? 'Medium' : 'Low'}</span>
                   </p>
+                </div>
+
+                <div className="p-6 bg-gray-800/50 rounded-lg mt-4">
+                  <p className="text-lg text-gray-300 mb-4">
+                    Assuming there is only one exoplanet orbitting around this star, these are its characteristics:  
+                  </p>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="p-2 rounded-lg bg-gray-700/50 mt-6 grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <p className='font-semibold'>Orbital Velocity
+                        <span className='m-2 font-light text-accent'>(km/s)</span>
+                      </p>
+                      <p>{additionalData['orbital_velocity']}</p>
+                    </div>
+                    <div className="p-2 rounded-lg bg-gray-700/50 mt-6 grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <p className='font-semibold'>Inclination
+                        <span className='m-2 font-light text-accent'>(i)</span>
+                      </p>
+                      <p>{roundToDecimal(additionalData['inclination'],5)}</p>
+                    </div>
+                  </div>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="p-2 rounded-lg bg-gray-700/50 mt-6 grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <p className='font-semibold'>Planetary Radius
+                        <span className='m-2 font-light text-accent'>(R⊕)</span>
+                      </p>
+                      <p>{roundToDecimal(additionalData['planetary_radius'][1], 10)}</p>
+                    </div>
+                    <div className="p-2 rounded-lg bg-gray-700/50 mt-6 grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <p className='font-semibold'>Orbital Period
+                        <span className='m-2 font-light text-accent'>(i)</span>
+                      </p>
+                      <p>{roundToDecimal(additionalData['orbital_period'],5)}</p>
+                    </div>
+                  </div>
+                  <div className="p-2 rounded-lg bg-gray-700/50 mt-6 grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <p className='font-semibold'>Semi-Major Axis
+                      <span className='m-2 font-light text-accent'>(m)</span>
+                    </p>
+                    <p>{roundToDecimal(additionalData['semimajor_axis'],5)}</p>
+                  </div>
                 </div>
               </section>
             )}

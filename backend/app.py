@@ -1,14 +1,15 @@
-from flask import Flask, request, jsonify, make_response
+from flask import Flask, request, jsonify, make_response, send_file
 from flask_cors import CORS, cross_origin
-from functools import wraps
 import joblib
 import os
 import numpy as np
+import random
 import pandas as pd
-from scipy.stats import skew, kurtosis
-from scipy.signal import lombscargle
 from star_aggregator import extract_features
 from format_data import add_features
+import matplotlib.pyplot as plt
+import io
+from extra_features import calculate_additional_params
 
 app = Flask(__name__)
 
@@ -47,8 +48,6 @@ def predict():
         # Extract features
         data = pd.DataFrame(data)
         features = add_features(data)
-        # if not features:
-        #     return jsonify({"error": "Could not extract features from data"}), 400
             
         features = features.groupby("star_id").apply(extract_features).reset_index()
 
@@ -72,6 +71,8 @@ def predict():
         # Calculate confidence interval bounds
         lower_bound = max(0, probability - margin_of_error)
         upper_bound = min(1, probability + margin_of_error)
+
+        addParams = calculate_additional_params(features)
         
         return jsonify({
             "probability": probability,
@@ -81,12 +82,34 @@ def predict():
                 "lower_bound": round(lower_bound * 100, 2),
                 "upper_bound": round(upper_bound * 100, 2)
             },
+            "additionalParams": addParams,
             "message": "Prediction successful"
         })
         
     except Exception as e:
         print(f"Prediction error: {e}")
         return jsonify({"error": str(e)}), 500
+
+project_root = os.path.dirname(os.path.abspath(__file__))
+data_path = os.path.join(project_root, 'data', 'kepler_data.csv')
+df = pd.read_csv(data_path)
+
+@app.route('/lightcurve/random', methods=['GET'])
+@cross_origin()
+def random_lightcurve_block():
+
+    number = random.randint(0, len(df))
+    start = df.iloc[number]['star_id']
+    arr = list()
+    
+    arr = df[df['star_id'] == start]
+
+    sending = {
+        'label': df.iloc[number]['label'],
+        'data': list(arr['flux'])
+    }
+
+    return sending
 
 @app.route('/health', methods=['GET', 'OPTIONS'])
 @cross_origin()
