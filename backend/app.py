@@ -13,17 +13,17 @@ from extra_features import calculate_additional_params
 
 app = Flask(__name__)
 
+DEFAULT_ALLOWED = "http://20.187.48.226:5173,http://localhost:5173,http://127.0.0.1:5173"
+ALLOWED_ORIGINS = os.environ.get("ALLOWED_ORIGINS", DEFAULT_ALLOWED).split(",")
+
 # Configure CORS to allow requests from your frontend
 app.config['CORS_HEADERS'] = 'Content-Type'
 CORS(app, resources={
-    r"/predict": {
-        "origins": ["http://localhost:5173", "http://127.0.0.1:5173"],
-        "methods": ["OPTIONS", "POST"],
+    r"/*": {
+        "origins": ALLOWED_ORIGINS,
+        "methods": ["GET", "OPTIONS", "POST"],
         "allow_headers": ["Content-Type"]
     },
-    r"/*": {
-        "origins": "*"
-    }
 })
 
 # Load the model
@@ -33,9 +33,6 @@ model_data = joblib.load(model_path)
 model = model_data["model"]
 
 @app.route('/predict', methods=['POST'])
-@cross_origin(origins=['http://localhost:5173', 'http://127.0.0.1:5173'],
-              methods=['POST'],
-              allow_headers=['Content-Type'])
 def predict():
         
     try:
@@ -95,7 +92,6 @@ data_path = os.path.join(project_root, 'data', 'detailed_data.csv')
 df = pd.read_csv(data_path)
 
 @app.route('/lightcurve/random', methods=['GET'])
-@cross_origin()
 def random_lightcurve_block():
 
     number = random.randint(0, len(df))
@@ -122,5 +118,11 @@ def health_check():
         return response
     return jsonify({"status": "healthy"})
 
-if __name__ == "__main__":
-    app.run(host="127.0.0.1", port=5050, debug=True)
+# if __name__ == "__main__":
+#     app.run(host="127.0.0.1", port=5050, debug=True)
+
+if __name__ == '__main__':
+    host = os.environ.get("HOST", "0.0.0.0")
+    port = int(os.environ.get("PORT", "5050"))
+    debug = os.environ.get("FLASK_DEBUG", "") == "1"
+    app.run(host=host, port=port, debug=debug)

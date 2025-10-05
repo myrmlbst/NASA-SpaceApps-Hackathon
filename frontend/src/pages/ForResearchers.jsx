@@ -79,7 +79,7 @@ function ForResearchers() {
       });
 
       // Send to backend for prediction
-      const response = await axios.post('http://localhost:5050/predict', {
+      const response = await axios.post('http://20.187.48.226:5050/predict', {
         data: formattedData,
       }, {
         headers: {

@@ -16,7 +16,7 @@ const ExoplanetGame = () => {
 
 
   async function fetchRandomBlock() {
-    const res = await fetch(`http://localhost:5050/lightcurve/random`);
+    const res = await fetch(`http://20.187.48.226:5050/lightcurve/random`);
     if (!res.ok) throw new Error("Failed to load light curve");
     const json = await res.json();
     console.log(JSON.stringify(json));
