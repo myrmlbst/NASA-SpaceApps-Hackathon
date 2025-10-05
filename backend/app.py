@@ -91,7 +91,7 @@ def predict():
         return jsonify({"error": str(e)}), 500
 
 project_root = os.path.dirname(os.path.abspath(__file__))
-data_path = os.path.join(project_root, 'data', 'kepler_data.csv')
+data_path = os.path.join(project_root, 'data', 'detailed_data.csv')
 df = pd.read_csv(data_path)
 
 @app.route('/lightcurve/random', methods=['GET'])

@@ -5,7 +5,7 @@ from scipy.signal import lombscargle
 import os
 
 project_root = os.path.dirname(os.path.abspath(__file__)) 
-file_path = os.path.join(project_root, 'data', 'kepler_data.csv')
+file_path = os.path.join(project_root, 'data', 'detailed_data.csv')
 
 # Load data
 df = pd.read_csv(file_path)
