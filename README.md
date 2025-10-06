@@ -113,7 +113,7 @@
 ├── frontend/                   
 │   └── src/
 │       ├── components/                # reusable UI components
-│       │   └── calculator/            # habitability calculator components
+│       │   ├── calculator/            # habitability calculator components
 │       │   ├── game/                  # light curve game components
 │       │   └── ui/                    # base UI components (buttons, animations, etc.)
 │       ├── pages/                   
