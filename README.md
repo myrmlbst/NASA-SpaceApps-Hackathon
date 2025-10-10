@@ -6,24 +6,52 @@
 
 ## Project Overview
 
-**A World Away** is a machine learning-powered system designed to detect potential exoplanets by analyzing light curve data from the Kepler Space Telescope. This project was developed for the NASA Space Apps Challenge and provides researchers with a powerful tool for identifying exoplanet candidates in astronomical data.
+**A World Away** is an end-to-end platform that leverages machine learning to detect and analyze exoplanets using photometric data from the Kepler Space Telescope. Designed for both researchers and astronomy enthusiasts, the system provides powerful tools for exoplanet discovery, analysis, and education.
 
-The frontend is built with React and Vite, featuring an interactive interface that allows users to upload light curve data, view analysis results, and explore exoplanet characteristics through visualizations and interactive components.
+## Technical Stack
 
-## Features
+### Frontend
+- **Framework**: React 19 + Vite
+- **Styling**: Tailwind CSS + Tailwind Forms/Typography
+- **3D Visualization**: Three.js + React Three Fiber
+- **Data Visualization**: Chart.js, D3.js
+- **State Management**: React Hooks, Context API, React Query
+- **Routing**: React Router v7
+- **Build Tool**: Vite
 
-### Core Functionality
-- **Automated Data Processing**: Processes raw light curve data into meaningful features
-- **Machine Learning Pipeline**: Implements a robust classification model for exoplanet detection
-- **Comprehensive Analysis**: Calculates various transit characteristics and stellar parameters
 
-### Frontend Features
-- **Interactive Data Upload**: Drag-and-drop interface for uploading light curve data
-- **Real-time Visualization**: Interactive charts and graphs for data exploration
-- **Responsive Design**: Works seamlessly on desktop and tablet devices
-- **Interactive Playground**: Beginner-friendly interface for exploring exoplanet concepts
-- **Detailed Reporting**: Visual representation of analysis results with confidence metrics
-- **Dark Mode**: Eye-friendly dark theme for extended research sessions
+### Backend
+- **Framework**: Flask 2.2.0
+- **Machine Learning**: Scikit-learn 1.2.0+
+- **Scientific Computing**: NumPy, SciPy, Pandas
+- **Astronomy Tools**: Lightkurve, Astroquery
+- **API**: RESTful endpoints with CORS support
+- **Containerization**: Docker
+
+## Key Features
+### For Researchers
+- **Data Analysis Pipeline**
+  - Process raw Kepler light curve data
+  - Extract transit features and stellar parameters
+  - Generate comprehensive reports with confidence intervals
+
+### Educational Components
+- **Interactive Playground**
+  - Visualize exoplanet flux charts
+  - Learn about detection methods
+  - Learn about habitability of exoplanets
+
+### Technical Implementation
+- **Data Processing**
+  - Light curve normalization and detrending
+  - Transit feature extraction
+  - Stellar parameter estimation
+  - Outlier detection and handling
+
+- **Model Architecture**
+  - Ensemble learning for robust predictions
+  - Feature importance analysis
+  - Confidence scoring for detections
 
 ## System Architecture
 
@@ -71,29 +99,36 @@ The frontend is built with React and Vite, featuring an interactive interface th
 ```
 ├── backend/                     
 │   ├── input-test.csv       
-│   ├── detailed_data.csv         # process light curves
-│   ├── features.csv              # extract features
-│   └── model/                  
-│       ├── model.pkl                 # trained model
-│       └── metrics.json              # performance metrics
-│   ├── format-data.py                # data preprocessing
-│   ├── ml-model.py                   # training
-│   ├── star_aggregator.py            # feature extraction
-│   └── input-test.py                 # prediction script
+│   ├── detailed_data.csv               # process light curves
+│   ├── features.csv                    # extract features
+│   ├── model/                  
+│   │   ├── model.pkl                   # trained model
+│   │   └── metrics.json                # performance metrics
+│   ├── format-data.py                  # data preprocessing
+│   ├── ml-model.py                     # training
+│   ├── star_aggregator.py              # feature extraction
+│   ├── input-test.py                   # prediction script
+│   └── data/                           # raw light curve data and test data
+│
 ├── frontend/                   
 │   └── src/
-│       ├── components/              # reusable UI components
-│       │   └── calculator/          # habitability calculator components
-│       │   ├── game/                # game components
-│       │   └── ui/                  # base UI components (buttons, animations, etc.)
+│       ├── components/                # reusable UI components
+│       │   ├── calculator/            # habitability calculator components
+│       │   ├── game/                  # light curve game components
+│       │   └── ui/                    # base UI components (buttons, animations, etc.)
 │       ├── pages/                   
-│       │   ├── AboutModel.jsx       # model technical details
-│       │   └──  AboutPhysics.jsx     # astrophysics and photometry content
-│       │   ├── ForResearchers.jsx   # data analysis interface
-│       │   └── Playground.jsx       # interactive tools for non-technical users
+│       │   ├── AboutModel.jsx         # model technical details
+│       │   ├── AboutPhysics.jsx       # interact with the ML model
+│       │   ├── ForResearchers.jsx     # data analysis interface
+│       │   └── Playground.jsx         # interactive tools for non-technical users
+│       ├── lib/                       # utilities
+│       │ 
 │       ├── App.jsx                  
 │       ├── main.jsx           
-│       └── index.css                
+│       └── App.css 
+│
+├── .gitignore
+├── LICENSE               
 └── README.md                  
 ```
 
@@ -106,8 +141,52 @@ CSV files should contain the following columns:
 - `flux_err`: Measurement errors
 - `star_id`: Identifier for the star (optional for single-star analysis)
 
+## Getting Started
+
+### Prerequisites
+- Node.js 18+ (for frontend)
+- Python 3.9+ (for backend)
+- pip (Python package manager)
+
+### Installation
+
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/myrmlbst/NASA-SpaceApps-Hackathon.git
+   cd NASA-SpaceApps-Hackathon
+   ```
+
+2. **Set up the backend**
+   ```bash
+   cd backend
+   python -m venv venv
+   source venv/bin/activate  # On Windows: .\venv\Scripts\activate
+   pip install -r requirements.txt
+   ```
+
+3. **Set up the frontend**
+   ```bash
+   cd ../frontend
+   npm install
+   ```
+
+### Running Locally
+1. **Start the backend server**
+   ```bash
+   cd backend
+   flask run --port 5050
+   ```
+
+2. **Start the frontend development server**
+   ```bash
+   cd frontend
+   npm run dev
+   ```
+
+3. Access the application at `http://localhost:5173`
+
 ## Contributing
-Contributions are welcome! Feel free to submit a pull request:
+We welcome contributions! Please follow these steps:
 
 1. Fork the repository
 2. Create your feature branch (`git checkout -b feature/FeatureName`)
