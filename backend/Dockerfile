@@ -1,29 +1,36 @@
-# Backend Dockerfile - production-ready using Gunicorn
-FROM python:3.11-slim as base
+# backend/Dockerfile  (build context = repo root in App Runner)
+FROM python:3.11-slim AS base
 
-ENV PYTHONDONTWRITEBYTECODE=1
-ENV PYTHONUNBUFFERED=1
+ENV PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1
 
 WORKDIR /app
 
-# system deps for some packages (e.g., compiling or runtime libs)
+# System deps (only what you actually need)
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    build-essential \
-    gcc \
-    libpq-dev \
-    && rm -rf /var/lib/apt/lists/*
+    build-essential gcc libpq-dev \
+ && rm -rf /var/lib/apt/lists/*
 
-COPY requirements.txt ./
-# If your requirements file is under backend/requirements.txt with fence markers, ensure it's raw list in production.
-RUN pip install --upgrade pip setuptools wheel
-RUN pip install --no-cache-dir -r requirements.txt
+# Install Python deps
+# NOTE: path is from repo root because App Runner's context is the repo
+COPY backend/requirements.txt ./requirements.txt
+RUN pip install --upgrade pip setuptools wheel \
+ && pip install --no-cache-dir -r requirements.txt
 
-COPY . /app
+# Copy backend source only (keeps image smaller)
+COPY backend/ /app/
 
-# Use Gunicorn to serve the Flask app
+# Gunicorn config
 ENV FLASK_APP=app.py
-# Allow Render or other platforms to override the port
-ENV PORT=5050
-EXPOSE $PORT
+ENV PORT=8080
+# EXPOSE cannot use env vars; set literal
+EXPOSE 8080
+# Optional: tweak workers/threads/timeouts to your needs
+ENV GUNICORN_CMD_ARGS="--workers=2 --threads=2 --timeout=120"
 
-CMD ["sh", "-c", "gunicorn -w 4 -b 0.0.0.0:${PORT} app:app"]
+# (Optional) run as non-root for security
+RUN useradd -m appuser
+USER appuser
+
+# Start the server
+CMD ["sh", "-c", "gunicorn -b 0.0.0.0:${PORT} app:app"]

@@ -13,17 +13,41 @@ from extra_features import calculate_additional_params
 
 app = Flask(__name__)
 
-DEFAULT_ALLOWED = "http://20.187.48.226:5173,http://localhost:5173,http://127.0.0.1:5173"
-ALLOWED_ORIGINS = os.environ.get("ALLOWED_ORIGINS", DEFAULT_ALLOWED).split(",")
+# DEFAULT_ALLOWED = "http://20.187.48.226:5173,http://localhost:5173,http://127.0.0.1:5173"
+# ALLOWED_ORIGINS = os.environ.get("ALLOWED_ORIGINS", DEFAULT_ALLOWED).split(",")
 
-# Configure CORS to allow requests from your frontend
-app.config['CORS_HEADERS'] = 'Content-Type'
+# # Configure CORS to allow requests from your frontend
+# app.config['CORS_HEADERS'] = 'Content-Type'
+# CORS(app, resources={
+#     r"/*": {
+#         "origins": ALLOWED_ORIGINS,
+#         "methods": ["GET", "OPTIONS", "POST"],
+#         "allow_headers": ["Content-Type"]
+#     },
+# })
+
+# CORS
+DEFAULT_ALLOWED = [
+    "http://localhost:5173",
+    "http://127.0.0.1:5173",
+    "http://20.187.48.226:5173",
+    r"https://.*\.amplifyapp\.com"  # any Amplify preview/prod subdomain
+]
+ALLOWED_ORIGINS = os.environ.get("ALLOWED_ORIGINS")
+if ALLOWED_ORIGINS:
+    # comma-separated list becomes explicit origins
+    ALLOWED_ORIGINS = ALLOWED_ORIGINS.split(",")
+else:
+    # keep regex allowed
+    ALLOWED_ORIGINS = DEFAULT_ALLOWED
+
+app.config["CORS_HEADERS"] = "Content-Type"
 CORS(app, resources={
     r"/*": {
         "origins": ALLOWED_ORIGINS,
-        "methods": ["GET", "OPTIONS", "POST"],
-        "allow_headers": ["Content-Type"]
-    },
+        "methods": ["GET", "POST", "OPTIONS"],
+        "allow_headers": ["Content-Type", "Authorization"]
+    }
 })
 
 # Load the model
@@ -88,7 +112,7 @@ def predict():
         return jsonify({"error": str(e)}), 500
 
 project_root = os.path.dirname(os.path.abspath(__file__))
-data_path = os.path.join(project_root, 'data', 'detailed_data.csv')
+data_path = os.path.join(project_root, 'data', 'game_data.csv')
 df = pd.read_csv(data_path)
 
 @app.route('/lightcurve/random', methods=['GET'])
@@ -121,8 +145,8 @@ def health_check():
 # if __name__ == "__main__":
 #     app.run(host="127.0.0.1", port=5050, debug=True)
 
-if __name__ == '__main__':
-    host = os.environ.get("HOST", "0.0.0.0")
-    port = int(os.environ.get("PORT", "5050"))
-    debug = os.environ.get("FLASK_DEBUG", "") == "1"
-    app.run(host=host, port=port, debug=debug)
+# if __name__ == '__main__':
+#     host = os.environ.get("HOST", "0.0.0.0")
+#     port = int(os.environ.get("PORT", "5050"))
+#     debug = os.environ.get("FLASK_DEBUG", "") == "1"
+#     app.run(host=host, port=port, debug=debug)

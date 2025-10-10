@@ -32,7 +32,6 @@ ENV/
 # Project specific
 *.h5
 *.pkl
-*.csv
 *.npy
 *.npz
 

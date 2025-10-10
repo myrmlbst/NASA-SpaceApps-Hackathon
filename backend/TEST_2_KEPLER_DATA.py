@@ -29,8 +29,8 @@ koi = pd.merge(koi, stellar, on="kepid", how="inner")
 
 
 # Select a subset (number of false pos and pos)
-planets = koi[koi["label"]==1].sample(4000, random_state=42)
-falsepos = koi[koi["label"]==0].sample(4000, random_state=42)
+planets = koi[koi["label"]==1].sample(30, random_state=42)
+falsepos = koi[koi["label"]==0].sample(30, random_state=42)
 selected = pd.concat([planets,falsepos])
 
 
@@ -135,5 +135,5 @@ for star_id, group in df.groupby("star_id"):
 
 # Final dataset
 project_root = os.path.dirname(os.path.abspath(__file__)) 
-out_file_path = os.path.join(project_root, 'data', 'new_data.csv')
+out_file_path = os.path.join(project_root, 'data', 'game_data.csv')
 df.to_csv(out_file_path, index=False)
