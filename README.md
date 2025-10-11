@@ -152,8 +152,8 @@ CSV files should contain the following columns:
 
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/myrmlbst/NASA-SpaceApps-Hackathon.git
-   cd NASA-SpaceApps-Hackathon
+   git clone https://github.com/myrmlbst/NASA-AI-Challenge.git
+   cd NASA-AI-Challenge
    ```
 
 2. **Set up the backend**
